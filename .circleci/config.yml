@@ -35,4 +35,4 @@ jobs:
       - run:
           name: Auto Job
           command: |
-            echo "Auto"
+            echo "Branch name: ${CIRCLE_BRANCH}"
