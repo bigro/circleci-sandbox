@@ -1,17 +1,26 @@
 version: 2.1
 
+executors:
+  shell-executor:
+    docker:
+      - image: circleci/node:14
+
 workflows:
   version: 2
   workflow:
     jobs:
-      - manual-job
+      - manual-job:
+          filters:
+            branches:
+              ignore: /.*/
       - auto-job:
-          requires:
-            - manual-job
+          filters:
+            branches:
+              only: main
 
 jobs:
   manual-job:
-    executor: shell
+    executor: shell-executor
     steps:
       - checkout
       - run:
@@ -20,10 +29,7 @@ jobs:
             echo "Manual"
 
   auto-job:
-    executor: shell
-    filters:
-      branches:
-        only: main
+    executor: shell-executor
     steps:
       - checkout
       - run:
