@@ -1,15 +1,32 @@
 version: 2.1
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - manual-job
+      - auto-job:
+          requires:
+            - manual-job
+
 jobs:
-  say-hello:
-    docker:
-      - image: cimg/base:stable
+  manual-job:
+    executor: shell
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Manual Job
+          command: |
+            echo "Manual"
 
-workflows:
-  say-hello-workflow:
-    jobs:
-      - say-hello
+  auto-job:
+    executor: shell
+    filters:
+      branches:
+        only: main
+    steps:
+      - checkout
+      - run:
+          name: Auto Job
+          command: |
+            echo "Auto"
